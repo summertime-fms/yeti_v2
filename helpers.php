@@ -20,6 +20,8 @@ function is_date_valid(string $date) : bool {
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
+
+
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
@@ -143,4 +145,14 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-
+/**
+ * Форматирует цену
+ * @param int|float $cost Цена
+ * @return string Отформатированная цена
+ */
+function format_cost($cost): string {
+    $normalized_cost = ceil($cost);
+    $formatted_cost = $normalized_cost < 1000 ? $normalized_cost : number_format($normalized_cost, 0, '', ' ');
+    return $formatted_cost . ' ₽';
+}
+?>
