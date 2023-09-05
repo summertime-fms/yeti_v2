@@ -155,4 +155,16 @@ function format_cost($cost): string {
     $formatted_cost = $normalized_cost < 1000 ? $normalized_cost : number_format($normalized_cost, 0, '', ' ');
     return $formatted_cost . ' ₽';
 }
+
+function format_time($deadline)  {
+    $now = time();
+    $deadline_ts = strtotime($deadline);
+    $hours_number = floor(($deadline_ts - $now) / 3600);
+    $minutes_number = floor((($deadline_ts - $now) % 3600) / 60);
+    $formatted_hours = $hours_number < 10 ? str_pad($hours_number, 2, "0", STR_PAD_LEFT) : $hours_number;
+    $formatted_minutes = $minutes_number < 10 ? str_pad($minutes_number, 2, "0", STR_PAD_LEFT) : $minutes_number;
+
+    return array($formatted_hours, $formatted_minutes);
+}
 ?>
+

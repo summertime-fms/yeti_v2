@@ -18,6 +18,7 @@
     <ul class="lots__list">
         <!--заполните этот список из массива с товарами-->
         <?php foreach ($lots as $key => $val): ?>
+        <?php $formatted_time = format_time($val['deadline']) ?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?=htmlspecialchars($val['image_url'])?>" width="350" height="260" alt="<?=htmlspecialchars($val['title']) ?? ''?>">
@@ -31,7 +32,7 @@
                             <span class="lot__cost"><?=htmlspecialchars(format_cost($val['cost']))?></span>
                         </div>
                         <div class="lot__timer timer">
-                            12:23
+                            <?=$formatted_time[0]?> : <?=$formatted_time[1]?>
                         </div>
                     </div>
                 </div>
