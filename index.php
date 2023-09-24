@@ -12,17 +12,21 @@ function get_categories():Array {
 };
 
 function get_lots():Array {
-    $query = '
+    $now = date('Y-m-d H:m:s');
+    $query = "
         SELECT 
             name AS category,
             title,
             description,
             image_url,
             initial_cost,
-            completion_date
+            completion_date,
+            creation_date
         FROM lots l 
             JOIN categories c 
-                ON c.id = l.category_id';
+                ON c.id = l.category_id 
+        WHERE completion_date > '$now'
+        ORDER BY creation_date DESC";
     return get_data($GLOBALS['con'], $query);
 };
 
@@ -33,6 +37,7 @@ $page_content = include_template('main.php', [
 
 $layout = [
     'title' => 'Главная',
+    'categories' => get_categories(),
     'content' => $page_content
 ];
 

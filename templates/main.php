@@ -6,7 +6,7 @@
         <?php foreach ($categories as $key => $val): ?>
 
             <li class="promo__item promo__item--<?=$val["code"]?>">
-                <a class="promo__link" href="pages/all-lots.html"><?=htmlspecialchars($val["name"])?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?=$val["name"]?></a>
             </li>
         <?php endforeach;?>
     </ul>
