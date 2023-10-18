@@ -67,7 +67,7 @@ function get_lots():Array {
  *
  * @return Array Данные лота
  */
-function get_lot(int $id):Array {
+function get_lot(int $id):Array | null {
     $query = '
         SELECT
             l.id,

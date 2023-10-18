@@ -20,8 +20,6 @@ function is_date_valid(string $date) : bool {
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
-
-
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *
