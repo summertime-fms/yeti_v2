@@ -19,6 +19,13 @@ function is_date_valid(string $date) : bool {
     return $dateTimeObj !== false && !date_get_last_errors();
 }
 
+function get_mime_type(Array $file): string {
+    $file_info = finfo_open(FILEINFO_MIME_TYPE);
+    $file_name = $file['tmp_name'];
+    
+    return finfo_file($file_info, $file_name);
+}
+
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
  *

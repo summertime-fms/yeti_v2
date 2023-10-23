@@ -44,6 +44,13 @@ $validation_rules = Array(
             return 'Значение должно быть целым числом больше 0';
         }
     },
+    'img' => function($file) {
+        if (empty($file['name'])) {
+            return 'Пожалуйста, прикрепите изображение лота.';
+        } else if (!in_array(get_mime_type($file), Array('image/png', 'image/jpeg'))) {
+            return 'Изображение должно быть в формате jpeg/jpg/png.';
+        }
+    }
 );
 
 function validate_fields(Array $fields, Array $rules): Array {
@@ -54,7 +61,7 @@ function validate_fields(Array $fields, Array $rules): Array {
         'message',
         'lot-rate',
         'lot-step',
-        'lot-date'
+        'lot-date',
     );
 
     foreach ($fields as $name => $val) {
@@ -74,9 +81,10 @@ function validate_fields(Array $fields, Array $rules): Array {
 $input = filter_input_array(INPUT_POST, $args);
 
 if ($input) {
-    $lot_image =  $_FILES['lot-img'];
+    $lot_image = $_FILES['lot-img'];
     $input['img'] = $lot_image;
     $errors = validate_fields($input, $validation_rules);
     $errors = array_filter($errors);
+    echo var_dump($errors);
 }
 echo $page;
