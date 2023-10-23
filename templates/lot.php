@@ -19,9 +19,11 @@
             <p class="lot-item__description"><?=$lot["description"]?></p>
         </div>
         <div class="lot-item__right">
+            <?php $formatted_time = format_time($lot['completion_date']);
+            $extra_class = $formatted_time[0] < 1 ? 'timer--finishing' : '';
+            ?>
             <div class="lot-item__state">
-                <div class="lot-item__timer timer">
-                    <?php $formatted_time = format_time($lot['completion_date']);?>
+                <div class="lot-item__timer timer <?=$extra_class?>">
                     <?= $formatted_time[0]?> : <?=$formatted_time[1]?>
                 </div>
                 <div class="lot-item__cost-state">

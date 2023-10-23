@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Europe/Moscow');
+
 require_once './helpers.php';
 require_once './db_helpers.php';
 
@@ -23,9 +25,6 @@ $page_content = include_template('lot.php', Array(
     'lot' => $lot,
     'categories' => $cats,
 ));
-
-// TODO:при отсутствии параметра id - перенаправлять на 404
-// TODO:при несуществующем id - сообщать об отсутствии такого лота/истечении его срока
 
 $layout = [
     'title' => 'Главная',

@@ -89,4 +89,3 @@ function get_lot(int $id):Array | null {
 
 //    return get_data($GLOBALS['con'], $query);
 };
-//TODO: обработать кейс когда в БД не нашлось лота ://
