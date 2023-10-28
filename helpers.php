@@ -22,7 +22,7 @@ function is_date_valid(string $date) : bool {
 function get_mime_type(Array $file): string {
     $file_info = finfo_open(FILEINFO_MIME_TYPE);
     $file_name = $file['tmp_name'];
-    
+
     return finfo_file($file_info, $file_name);
 }
 
@@ -169,6 +169,21 @@ function format_time($deadline)  {
     $formatted_minutes = $minutes_number < 10 ? str_pad($minutes_number, 2, "0", STR_PAD_LEFT) : $minutes_number;
 
     return array($formatted_hours, $formatted_minutes);
+}
+
+/**
+ * Сохраняет файл на сервере
+ * @param array $file Элемент из $_FILES
+ * @param string $dir_name Название директории, в которую следует переместить файл
+ * @return string $url Путь до файла
+ */
+function save_file($file, $dir_name = 'uploads') {
+    $name = $file['name'];
+    $path = __DIR__ . '/' .$dir_name. '/';
+    $url = '/' . $dir_name . '/' . $name;
+
+    move_uploaded_file($file['tmp_name'], $path . $name);
+    return $url;
 }
 ?>
 

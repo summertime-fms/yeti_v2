@@ -5,18 +5,6 @@ require_once './db_helpers.php';
 
 $cats = get_categories();
 
-$page_content = include_template('add-lot.php', Array(
-    'categories' => $cats,
-));
-
-$layout = Array(
-    'title' => 'Добавление лота',
-    'categories'=> $cats,
-    'content'=>$page_content,
-);
-
-$page = include_template('layout.php', $layout);
-
 $args = Array(
     'lot-name' => FILTER_SANITIZE_SPECIAL_CHARS,
     'category' => FILTER_SANITIZE_NUMBER_INT,
@@ -76,7 +64,11 @@ function validate_fields(Array $fields, Array $rules): Array {
     }
 
     return $errors;
-}
+};
+
+$page_data = Array(
+    'categories' => $cats,
+);
 
 $input = filter_input_array(INPUT_POST, $args);
 
@@ -85,6 +77,48 @@ if ($input) {
     $input['img'] = $lot_image;
     $errors = validate_fields($input, $validation_rules);
     $errors = array_filter($errors);
-    echo var_dump($errors);
+    if (!empty($errors)) {
+        $page_data['errors'] = $errors;
+    } else {
+        $file_url = save_file($input['img']);
+        $data = Array(
+            $input['lot-name'],
+            1,
+            date('Y:m:d'),
+            $input['category'],
+            $input['message'],
+            $file_url,
+            $input['lot-rate'],
+            $input['lot-step'],
+            $input['lot-date']
+        );
+        $sql = 'INSERT INTO lots (
+                  title,
+                  user_id,
+                  creation_date,
+                  category_id,
+                  description,
+                  image_url,
+                  initial_cost,
+                  bid_step,
+                  completion_date) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+        $stmt = db_get_prepare_stmt($GLOBALS['con'], $sql, $data);
+        mysqli_stmt_execute($stmt);
+        $id = mysqli_insert_id($GLOBALS['con']);
+        header('Location: lot.php?id='.$id);
+    }
 }
+
+$page_content = include_template('add-lot.php', $page_data);
+
+$layout = Array(
+    'title' => 'Добавление лота',
+    'categories'=> $cats,
+    'content'=>$page_content,
+);
+
+$page = include_template('layout.php', $layout);
+
 echo $page;
