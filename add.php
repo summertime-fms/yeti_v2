@@ -14,33 +14,6 @@ $args = Array(
     'lot-date' => FILTER_SANITIZE_SPECIAL_CHARS
 );
 
-$validation_rules = Array(
-    'lot-rate' => function($value) {
-        if (is_float($value) || $value < 1) {
-                return 'Значение должно быть целым числом больше 0';
-            }
-    },
-    'lot-date' => function($value) {
-        if (!is_date_valid($value)) {
-            return 'Дата должна быть в формате "ГГГГ-ММ-ДД".';
-        } else if (strtotime($value) - strtotime(date('Y-m-d')) < (60 * 60 * 24)) {
-            return 'Дата завершения должна быть больше текущей даты, хотя бы на один день.';
-        }
-    },
-    'lot-step' => function($value) {
-        if (is_float($value) || $value < 1) {
-            return 'Значение должно быть целым числом больше 0';
-        }
-    },
-    'img' => function($file) {
-        if (empty($file['name'])) {
-            return 'Пожалуйста, прикрепите изображение лота.';
-        } else if (!in_array(get_mime_type($file), Array('image/png', 'image/jpeg'))) {
-            return 'Изображение должно быть в формате jpeg/jpg/png.';
-        }
-    }
-);
-
 function validate_fields(Array $fields, Array $rules): Array {
     $errors = Array();
     $required_fields = Array(
@@ -81,10 +54,11 @@ if ($input) {
         $page_data['errors'] = $errors;
     } else {
         $file_url = save_file($input['img']);
+
         $data = Array(
             $input['lot-name'],
             1,
-            date('Y:m:d'),
+            date('Y-m-d H:m:s'),
             $input['category'],
             $input['message'],
             $file_url,

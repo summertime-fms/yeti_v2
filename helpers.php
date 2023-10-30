@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -185,5 +186,6 @@ function save_file($file, $dir_name = 'uploads') {
     move_uploaded_file($file['tmp_name'], $path . $name);
     return $url;
 }
-?>
+
+require_once 'validation.php';
 
