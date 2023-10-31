@@ -1,9 +1,12 @@
 <?php
+/**
+ * @var $con mysqli - Ресурс соединения
+ * @var $categories array - Категории из БД
+ */
 
-require_once './helpers.php';
-require_once './db_helpers.php';
+require_once 'init.php';
+require_once 'validation.php';
 
-$cats = get_categories();
 
 $args = Array(
     'lot-name' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -39,12 +42,11 @@ function validate_fields(Array $fields, Array $rules): Array {
         }
     }
 
-    echo var_dump($errors);
     return $errors;
 };
 
 $page_data = Array(
-    'categories' => $cats,
+    'categories' => $categories
 );
 
 $input = filter_input_array(INPUT_POST, $args);
@@ -86,6 +88,7 @@ if ($input) {
         mysqli_stmt_execute($stmt);
         $id = mysqli_insert_id($GLOBALS['con']);
         header('Location: lot.php?id='.$id);
+        exit();
     }
 }
 
@@ -93,7 +96,7 @@ $page_content = include_template('add-lot.php', $page_data);
 
 $layout = Array(
     'title' => 'Добавление лота',
-    'categories'=> $cats,
+    'categories'=> $categories,
     'content'=>$page_content,
 );
 

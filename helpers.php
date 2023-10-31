@@ -187,5 +187,75 @@ function save_file($file, $dir_name = 'uploads') {
     return $url;
 }
 
-require_once 'validation.php';
+/**
+ * Выполняет sql-запрос, возвращающий данные в виде ассоциативного массива
+ *
+ * @param $con mysqli Ресурс соединения
+ * @param $query string SQL запроc
+ *
+ * @return Array Массив с данными
+ */
+function get_data(mysqli $con, string $query):Array {
+    $res = mysqli_query($con, $query);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+};
+
+/**
+ * Возвращает данные конкретного лота
+ * @param $id int айдишник лота
+ * @return array Данные лота
+ */
+function get_lot(int $id, mysqli $con):Array | null {
+    $query = '
+        SELECT
+            l.id,
+            title,
+            name AS category,
+            description,
+            image_url,
+            initial_cost,
+            completion_date,
+            creation_date
+        FROM lots l
+        JOIN categories c
+                ON c.id = l.category_id 
+                WHERE l.id = '.$id.'
+    ';
+
+    $res = mysqli_query($con, $query);
+    return mysqli_fetch_assoc($res);
+};
+
+/**
+ * Возвращает все активные лоты из БД
+ * @return Array Массив с лотами
+ */
+function get_lots(mysqli $con):Array {
+    $now = date('Y-m-d H:m:s');
+    $query = "
+        SELECT 
+            l.id,
+            name AS category,
+            title,
+            description,
+            image_url,
+            initial_cost,
+            completion_date,
+            creation_date
+        FROM lots l
+            JOIN categories c
+                ON c.id = l.category_id 
+        WHERE completion_date > '$now'
+        ORDER BY creation_date DESC";
+    return get_data($con, $query);
+};
+
+/**
+ * Возвращает категории лотов из БД
+ * @return Array Массив с категориями
+ */
+function get_categories(mysqli $con):Array {
+    $query = 'SELECT * from categories';
+    return get_data($con, $query);
+};
 

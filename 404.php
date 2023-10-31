@@ -1,16 +1,17 @@
 <?php
-require_once './helpers.php';
-require_once './db_helpers.php';
+/**
+ * @var $categories array - Категории из БД
+ */
+require_once 'init.php';
 
-$cats = get_categories();
 $page_content = include_template('404.php', Array(
-    'categories' => $cats,
+    'categories' => $categories,
 ));
 
 $layout = Array(
     'title' => 'Ошибка 404',
     'content' => $page_content,
-    'categories'=> $cats
+    'categories'=> $categories
 );
 
 $page = include_template('layout.php', $layout);

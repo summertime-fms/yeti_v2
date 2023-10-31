@@ -1,20 +1,21 @@
 <?php
-date_default_timezone_set('Europe/Moscow');
-require_once './helpers.php';
-require_once './db_helpers.php';
+/**
+ * @var $categories array Категории лотов
+ * @var $com mysqli Ресурс соединения
+ */
 
+require_once 'init.php';
 $is_auth = rand(0, 1);
-$cats = get_categories();
 $user_name = ''; // укажите здесь ваше имя
 
 $page_content = include_template('main.php', Array(
-    'categories' => $cats,
-    'lots' => get_lots()
+    'categories' => $categories,
+    'lots' => $lots
 ));
 
 $layout = [
     'title' => 'Главная',
-    'categories' => $cats,
+    'categories' => $categories,
     'content' => $page_content
 ];
 

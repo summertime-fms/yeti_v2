@@ -1,9 +1,7 @@
 <?php
 
-require_once './helpers.php';
-require_once './db_helpers.php';
-
-$cats = get_categories();
+require_once 'init.php';
+require_once 'validation.php';
 
 $page_data = Array();
 
@@ -61,7 +59,8 @@ if ($input) {
         if ($error) {
             echo 'Ошибка MYSQL:' . $error;
         } else {
-            header('Location: sign-in.php');
+            header('Location: login.php');
+            exit();
         }
     }
 }
@@ -71,7 +70,7 @@ $page_content = include_template('sign-up.php', $page_data);
 $layout = Array(
     'title' => 'Регистрация',
     'content' => $page_content,
-    'categories' => $cats
+    'categories' => $categories
 );
 
 $page = include_template('layout.php', $layout);

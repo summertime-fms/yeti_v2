@@ -1,34 +1,35 @@
 <?php
-date_default_timezone_set('Europe/Moscow');
+/**
+ * @var $con mysqli - Ресурс соединения
+ * @var $categories array - Категории из БД
+ */
 
-require_once './helpers.php';
-require_once './db_helpers.php';
+require_once 'init.php';
 
 $lot_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) ?? '';
+
 $lot = null;
 if (!$lot_id) {
     http_response_code(404);
     header('Location: 404.php');
     die;
 } else {
-    $lot = get_lot(intval($lot_id));
+    $lot = get_lot(intval($lot_id), $con);
 }
 
 if (!$lot) {
     header('Location: 404.php');
-    die;
+    exit();
 }
-
-$cats = get_categories();
 
 $page_content = include_template('lot.php', Array(
     'lot' => $lot,
-    'categories' => $cats,
+    'categories' => $categories,
 ));
 
 $layout = [
     'title' => 'Главная',
-    'categories' => $cats,
+    'categories' => $categories,
     'content' => $page_content
 ];
 
