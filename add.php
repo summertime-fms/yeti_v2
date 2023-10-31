@@ -31,11 +31,15 @@ function validate_fields(Array $fields, Array $rules): Array {
         } else {
             if (isset($rules[$name])) {
                 $fn = $rules[$name];
-                $errors[$name] = $fn($val);
+                $result = $fn($val);
+                if (gettype($result) == 'string') {
+                    $errors[$name] = $result;
+                }
             }
         }
     }
 
+    echo var_dump($errors);
     return $errors;
 };
 

@@ -8,7 +8,7 @@ $cats = get_categories();
 $page_data = Array();
 
 $args = Array(
-    'email' => FILTER_SANITIZE_EMAIL,
+    'email' => FILTER_DEFAULT,
     'password' => FILTER_DEFAULT,
     'name' => FILTER_SANITIZE_SPECIAL_CHARS,
     'message' => FILTER_SANITIZE_SPECIAL_CHARS
@@ -26,7 +26,6 @@ function validate_fields(array $fields, array $rules): array {
                 $errors[$name] = $result;
             }
         }
-
     }
 
     return $errors;
@@ -39,6 +38,31 @@ if ($input) {
     $errors = array_filter(validate_fields($input, $validation_rules));
     if (!empty($errors)) {
         $page_data['errors'] = $errors;
+    } else {
+        $data = Array(
+            date('Y-m-d H:m:s'),
+            $input['email'],
+            $input['name'],
+            password_hash($input['password'], PASSWORD_DEFAULT),
+            $input['message']
+        );
+        $sql = 'INSERT INTO users (
+                   registration_date,
+                   email,
+                   name,
+                   password,
+                   contact_info)
+                VALUES (?, ?, ?, ?, ?)';
+
+
+        $stmt = db_get_prepare_stmt($GLOBALS['con'], $sql, $data);
+        mysqli_stmt_execute($stmt);
+        $error = mysqli_error($GLOBALS['con']);
+        if ($error) {
+            echo 'Ошибка MYSQL:' . $error;
+        } else {
+            header('Location: sign-in.php');
+        }
     }
 }
 
@@ -46,7 +70,7 @@ $page_content = include_template('sign-up.php', $page_data);
 
 $layout = Array(
     'title' => 'Регистрация',
-    'content'=>$page_content,
+    'content' => $page_content,
     'categories' => $cats
 );
 

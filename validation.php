@@ -1,6 +1,7 @@
 <?php
 function check_existing_email(string $email):bool {
-    $sql = 'SELECT * FROM users WHERE email = '.$email;
+
+    $sql = "SELECT * FROM users WHERE email = '".$email."'";
     $db_res = mysqli_query($GLOBALS['con'], $sql);
     if (!$db_res) {
         $error = mysqli_error($GLOBALS['con']);
