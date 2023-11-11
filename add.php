@@ -7,7 +7,7 @@
 require_once 'init.php';
 require_once 'validation.php';
 
-if(isset($user)) {
+if(!isset($user)) {
     http_response_code(403);
     exit();
 }
@@ -40,7 +40,7 @@ if ($input) {
 
         $data = Array(
             $input['lot-name'],
-            1,
+            $_SESSION['user']['id'],
             date('Y-m-d H:m:s'),
             $input['category'],
             $input['message'],
