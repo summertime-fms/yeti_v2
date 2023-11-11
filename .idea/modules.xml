@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../levelup-animation-svg/.idea/levelup-animation-svg.iml" filepath="$PROJECT_DIR$/../levelup-animation-svg/.idea/levelup-animation-svg.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/yeti_v2.iml" filepath="$PROJECT_DIR$/.idea/yeti_v2.iml" />
     </modules>
   </component>

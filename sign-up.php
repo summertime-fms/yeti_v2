@@ -12,28 +12,17 @@ $args = Array(
     'message' => FILTER_SANITIZE_SPECIAL_CHARS
 );
 
-function validate_fields(array $fields, array $rules): array {
-    $errors = Array();
-
-    foreach ($fields as $name => $value) {
-        if (isset($rules[$name])) {
-            $fn = $rules[$name];
-            $result = $fn($value);
-
-            if (gettype($result) == 'string') {
-                $errors[$name] = $result;
-            }
-        }
-    }
-
-    return $errors;
-}
-
 $errors = Array();
 
 $input = filter_input_array(INPUT_POST, $args);
 if ($input) {
-    $errors = array_filter(validate_fields($input, $validation_rules));
+    $errors = validate_fields($input, $validation_rules);
+    if (!isset($errors['email'])) {
+        $errors['email'] = check_existing_email($input['email']);
+    }
+
+    $errors = array_filter($errors);
+
     if (!empty($errors)) {
         $page_data['errors'] = $errors;
     } else {
@@ -70,7 +59,7 @@ $page_content = include_template('sign-up.php', $page_data);
 $layout = Array(
     'title' => 'Регистрация',
     'content' => $page_content,
-    'categories' => $categories
+    'categories' => $categories,
 );
 
 $page = include_template('layout.php', $layout);

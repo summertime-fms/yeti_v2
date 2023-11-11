@@ -17,34 +17,6 @@ $args = Array(
     'lot-date' => FILTER_SANITIZE_SPECIAL_CHARS
 );
 
-function validate_fields(Array $fields, Array $rules): Array {
-    $errors = Array();
-    $required_fields = Array(
-        'lot-name',
-        'category',
-        'message',
-        'lot-rate',
-        'lot-step',
-        'lot-date',
-    );
-
-    foreach ($fields as $name => $val) {
-        if (in_array($name, $required_fields) && strlen($val) == 0) {
-            $errors[$name] = 'Пожалуйста, заполните это поле.';
-        } else {
-            if (isset($rules[$name])) {
-                $fn = $rules[$name];
-                $result = $fn($val);
-                if (gettype($result) == 'string') {
-                    $errors[$name] = $result;
-                }
-            }
-        }
-    }
-
-    return $errors;
-};
-
 $page_data = Array(
     'categories' => $categories
 );

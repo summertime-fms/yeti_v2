@@ -17,4 +17,4 @@ if (!$con) {
 mysqli_set_charset($con, 'utf8');
 
 $categories = get_categories($con);
-
+$user = $_SESSION['user'] ?? null;

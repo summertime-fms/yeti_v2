@@ -1,5 +1,5 @@
 <?php
-function check_existing_email(string $email):bool {
+function check_existing_email(string $email):string | null {
 
     $sql = "SELECT * FROM users WHERE email = '".$email."'";
     $db_res = mysqli_query($GLOBALS['con'], $sql);
@@ -9,9 +9,9 @@ function check_existing_email(string $email):bool {
     }
     $res = mysqli_fetch_assoc($db_res);
     if ($res) {
-        return false;
+        return 'Пользователь с таким e-mail уже зарегистрирован';
     }
-    return true;
+    return null;
 }
 
 $validation_rules = Array(
@@ -44,8 +44,6 @@ $validation_rules = Array(
             return 'Пожалуйста, введите e-mail';
         } else if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return 'Неверный формат e-mail.';
-        } else if (!check_existing_email($value)) {
-            return 'Пользователь с такой почтой уже зарегистрирован.';
         } else {
             return true;
         }
@@ -68,10 +66,37 @@ $validation_rules = Array(
         return true;
     },
     'message' => function($value) {
-        if (strlen($value) == 0) {
+        if (strlen($value) === 0) {
             return 'Пожалуйста, введите ваше имя.';
         };
 
         return true;
+    },
+    'lot-name' => function($value) {
+        if (strlen($value) === 0) {
+            return 'Пожалуйста, введите название лота.';
+        }
+    },
+    'category' => function($value) {
+        if (strlen($value) === 0) {
+            return 'Пожалуйста, укажите категорию.';
+        }
     }
 );
+
+function validate_fields(array $fields, array $rules): array {
+    $errors = Array();
+
+    foreach ($fields as $name => $value) {
+        if (isset($rules[$name])) {
+            $fn = $rules[$name];
+            $result = $fn($value);
+
+            if (gettype($result) == 'string') {
+                $errors[$name] = $result;
+            }
+        }
+    }
+
+    return $errors;
+}

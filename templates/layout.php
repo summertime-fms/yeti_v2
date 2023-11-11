@@ -16,16 +16,27 @@
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
             <a class="main-header__logo">
-                <img src="./img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
+                <img src="./img/logo.png" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
             <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
-            <a class="button" href="sign-up.php">Регистрация</a>
+            <?php if(isset($user)):?>
+                <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
+            <?php endif;?>
+
+            <?php if(!isset($user)):?>
+                <a class="button" href="sign-up.php">Регистрация</a>
+            <?php endif;?>
 
             <nav class="user-menu">
+                <?php if(isset($user)): ?>
+                    <span><?=$user['name']?></span>
+                    <a href="logout.php">Выйти</a>
+                <?php else:?>
+                <a class="button" href="login.php">Войти</a>
+                <?php endif;?>
                 <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
             </nav>
         </div>
