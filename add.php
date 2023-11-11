@@ -7,6 +7,11 @@
 require_once 'init.php';
 require_once 'validation.php';
 
+if(isset($user)) {
+    http_response_code(403);
+    exit();
+}
+
 
 $args = Array(
     'lot-name' => FILTER_SANITIZE_SPECIAL_CHARS,

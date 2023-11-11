@@ -22,6 +22,7 @@
             <?php $formatted_time = format_time($lot['completion_date']);
             $extra_class = $formatted_time[0] < 1 ? 'timer--finishing' : '';
             ?>
+            <?php if(isset($user)):?>
             <div class="lot-item__state">
                 <div class="lot-item__timer timer <?=$extra_class?>">
                     <?= $formatted_time[0]?> : <?=$formatted_time[1]?>
@@ -44,6 +45,7 @@
                     <button type="submit" class="button">Сделать ставку</button>
                 </form>
             </div>
+            <?php endif;?>
             <div class="history">
                 <h3>История ставок (<span>10</span>)</h3>
                 <table class="history__list">

@@ -3,6 +3,11 @@
 require_once 'init.php';
 require_once 'validation.php';
 
+if(isset($user)) {
+    http_response_code(403);
+    exit();
+}
+
 $page_data = Array();
 
 $args = Array(
