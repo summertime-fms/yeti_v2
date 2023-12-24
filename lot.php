@@ -30,7 +30,8 @@ $page_content = include_template('lot.php', Array(
 $layout = [
     'title' => 'Главная',
     'categories' => $categories,
-    'content' => $page_content
+    'content' => $page_content,
+    'user' => $user
 ];
 
 $page = include_template('layout.php', $layout);

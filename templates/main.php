@@ -16,21 +16,21 @@
     </div>
     <ul class="lots__list">
         <!--заполните этот список из массива с товарами-->
-        <?php foreach ($lots as $key => $val): ?>
-        <?php $formatted_time = format_time($val['completion_date']) ?>
+        <?php foreach ($lots as $lot): ?>
+        <?php $formatted_time = format_time($lot['completion_date']) ?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="<?=htmlspecialchars($val['image_url'])?>" width="350" height="260" alt="<?=htmlspecialchars($val['title']) ?? ''?>">
+                    <img src="<?=htmlspecialchars($lot['image_url'])?>" width="350" height="260" alt="<?=htmlspecialchars($lot['title']) ?? ''?>">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?=htmlspecialchars($val['category']) ?? ''?></span>
+                    <span class="lot__category"><?=htmlspecialchars($lot['category']) ?? ''?></span>
                     <h3 class="lot__title">
-                        <a class="text-link" href="lot.php?id=<?=$val['id']?>"><?=htmlspecialchars($val['title']) ?? ''?></a>
+                        <a class="text-link" href="lot.php?id=<?=$lot['id']?>"><?=htmlspecialchars($lot['title']) ?? ''?></a>
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"></span>
-                            <span class="lot__cost"><?=htmlspecialchars(format_cost($val['initial_cost']))?></span>
+                            <span class="lot__cost"><?=htmlspecialchars(format_cost($lot['initial_cost']))?></span>
                         </div>
                         <div class="lot__timer timer">
                             <?=$formatted_time[0]?> : <?=$formatted_time[1]?>

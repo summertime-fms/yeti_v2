@@ -1,4 +1,5 @@
 <main>
+
     <nav class="nav">
         <ul class="nav__list container">
             <?php foreach ($categories as $key => $val): ?>
@@ -41,6 +42,8 @@
         </div>
 
         <span class="form__error"><?=$errors['message'] ?? ''?></span>
+
+        <?php $error_class = isset($errors['img']) ? 'form__item--invalid' : ''?>
 
         <div class="form__item <?=$error_class?> form__item--file">
             <label>Изображение <sup>*</sup></label>

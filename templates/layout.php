@@ -18,7 +18,7 @@
             <a class="main-header__logo">
                 <img src="./img/logo.png" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
+            <form class="main-header__search" method="get" action="search.php" autocomplete="off">
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
@@ -54,7 +54,7 @@
             <?php foreach ($categories as $key => $val): ?>
 
                 <li class="promo__item promo__item--<?=$val["code"]?>">
-                    <a class="promo__link" href="pages/all-lots.html"><?=$val["name"]?></a>
+                    <a class="promo__link" href="/all-lots.php?category_id=<?=$val['id']?>"><?=$val["name"]?></a>
                 </li>
             <?php endforeach;?>
         </ul>

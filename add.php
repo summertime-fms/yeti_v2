@@ -75,6 +75,7 @@ $layout = Array(
     'title' => 'Добавление лота',
     'categories'=> $categories,
     'content'=>$page_content,
+    'user' => $user
 );
 
 $page = include_template('layout.php', $layout);
