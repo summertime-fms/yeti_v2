@@ -250,31 +250,6 @@ function get_lots(mysqli $con):Array {
     return get_data($con, $query);
 };
 
-/**
- * Возвращает все активные лоты из БД по категории
- * @param $cat_id int айдишник категории
- * @return Array Массив с лотами
- */
-function get_lots_by_category($con, int $cat_id):Array {
-    $now = date('Y-m-d H:m:s');
-    $query = "
-        SELECT 
-            l.id,
-            name AS category,
-            title,
-            description,
-            image_url,
-            initial_cost,
-            completion_date,
-            creation_date
-        FROM lots l
-            JOIN categories c
-                ON c.id = l.category_id 
-        WHERE completion_date > '$now'
-        AND l.category_id = {$cat_id}
-        ORDER BY creation_date DESC";
-    return get_data($con, $query);
-}
 
 /**
  * Возвращает категории лотов из БД
