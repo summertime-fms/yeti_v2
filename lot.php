@@ -25,6 +25,7 @@ if (!$lot) {
 
 $lot['actual_cost'] = $lot['bets'] ? end($lot['bets'])['cost'] : $lot['initial_cost'];
 $min_bet = $lot['actual_cost'] + $lot['bid_step'];
+$lot_id = $_GET['id'];
 
 $page_vars = Array(
     'lot' => $lot,
@@ -43,10 +44,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
     if (count($errors) > 0) {
         $page_vars['errors'] = $errors;
+    } else {
+        $date = date('d-m-Y H:m');
+        $data = Array(
+            date('Y-m-d H:m:s'),
+            $bet,
+            $user['id'],
+            $lot_id,
+        );
+        $sql = 'INSERT INTO bets (
+                  creation_date, cost, user_id, lot_id)
+                VALUES (?, ?, ?, ?)';
+        $stmt = db_get_prepare_stmt($con, $sql, $data);
+        mysqli_stmt_execute($stmt);
+        $error = mysqli_error($con);
+        if ($error) {
+            echo 'Ошибка MYSQL:' . $error;
+        } else {
+            header('Location: lot.php?id='. $lot_id);
+            exit();
+        }
     }
 }
-
-
 $page_content = include_template('lot.php', $page_vars);
 
 $layout = Array(

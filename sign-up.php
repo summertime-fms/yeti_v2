@@ -47,9 +47,9 @@ if ($input) {
                 VALUES (?, ?, ?, ?, ?)';
 
 
-        $stmt = db_get_prepare_stmt($GLOBALS['con'], $sql, $data);
+        $stmt = db_get_prepare_stmt($con, $sql, $data);
         mysqli_stmt_execute($stmt);
-        $error = mysqli_error($GLOBALS['con']);
+        $error = mysqli_error($con);
         if ($error) {
             echo 'Ошибка MYSQL:' . $error;
         } else {
