@@ -206,7 +206,7 @@ function get_data(mysqli $con, string $query):Array {
  * @return array Данные лота
  */
 function get_lot(int $id, mysqli $con):Array | null {
-    $query = '
+    $query_lot = '
         SELECT
             l.id,
             title,
@@ -215,15 +215,33 @@ function get_lot(int $id, mysqli $con):Array | null {
             image_url,
             initial_cost,
             completion_date,
-            creation_date
+            creation_date,
+            bid_step
         FROM lots l
         JOIN categories c
                 ON c.id = l.category_id 
                 WHERE l.id = '.$id.'
     ';
 
-    $res = mysqli_query($con, $query);
-    return mysqli_fetch_assoc($res);
+    $query_bets = '
+        SELECT
+         *
+         FROM bets 
+         WHERE lot_id = '.$id.';
+    ';
+
+    mysqli_begin_transaction($con);
+    $res1 = mysqli_query($con, $query_lot);
+    $res2 = mysqli_query($con, $query_bets);
+    if ($res1 && $res2) {
+        mysqli_commit($con);
+        $lot =  mysqli_fetch_assoc($res1);
+        $lot['bets'] = mysqli_fetch_all($res2, MYSQLI_ASSOC);
+        return $lot;
+    } else {
+        mysqli_rollback($con);
+        return null;
+    }
 };
 
 /**

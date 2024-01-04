@@ -8,6 +8,8 @@
         <?php endforeach;?>
     </ul>
 </nav>
+
+
 <section class="lot-item container">
     <h2><?=$lot["title"]?></h2>
     <div class="lot-item__content">
@@ -30,17 +32,23 @@
                 <div class="lot-item__cost-state">
                     <div class="lot-item__rate">
                         <span class="lot-item__amount">Текущая цена</span>
-                        <span class="lot-item__cost"><?=$lot["initial_cost"]?></span>
+                        <span class="lot-item__cost"><?=$lot['actual_cost']?></span>
                     </div>
+
                     <div class="lot-item__min-cost">
-                        Мин. ставка <span>12 000 р</span>
+                        Мин. ставка <span><?=$min_bet?> р</span>
                     </div>
                 </div>
-                <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-                    <p class="lot-item__form-item form__item form__item--invalid">
+                <form class="lot-item__form" action="/lot.php?id=<?=$_GET['id']?>" method="post" autocomplete="off">
+                    <?php
+                        $invalid_class = isset($errors['bet']) ? 'form__item--invalid' : '';
+                    ?>
+                    <p class="lot-item__form-item form__item <?=$invalid_class?>">
                         <label for="cost">Ваша ставка</label>
-                        <input id="cost" type="text" name="cost" placeholder="12 000">
-                        <span class="form__error">Введите наименование лота</span>
+                        <input id="cost" type="number" name="bet" placeholder="<?=$min_bet?>">
+                        <?php if (isset($errors['bet'])): ?>
+                            <span class="form__error"><?=$errors['bet']?></span>
+                        <?php endif;?>
                     </p>
                     <button type="submit" class="button">Сделать ставку</button>
                 </form>

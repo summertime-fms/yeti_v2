@@ -81,20 +81,29 @@ $validation_rules = Array(
         if (strlen($value) === 0) {
             return 'Пожалуйста, укажите категорию.';
         }
+    },
+    'bet' => function($value, $args) {
+        extract($args);
+        $value = intval($value);
+        if (!$value || $value <= 0) {
+            return 'Значение должно быть целым числом больше 0';
+        } elseif ($value < $min_bet) {
+            return 'Размер ставки должен быть не меньше ' . $min_bet;
+        }
     }
 );
 
-function validate_fields(array $fields, array $rules): array {
+function validate_fields(array $fields, array $rules, array $extra_args = Array()): array {
     $errors = Array();
 
     foreach ($fields as $name => $value) {
         if (isset($rules[$name])) {
             $fn = $rules[$name];
-            $result = $fn($value);
-
-            if (gettype($result) == 'string') {
+            $params = $extra_args[$name] ?? false;
+            $result = $fn($value, $params);
+//            if (gettype($result) == 'string') {
                 $errors[$name] = $result;
-            }
+//            }
         }
     }
 
