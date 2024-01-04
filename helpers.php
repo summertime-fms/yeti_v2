@@ -216,7 +216,8 @@ function get_lot(int $id, mysqli $con):Array | null {
             initial_cost,
             completion_date,
             creation_date,
-            bid_step
+            bid_step,
+            user_id
         FROM lots l
         JOIN categories c
                 ON c.id = l.category_id 
@@ -225,8 +226,9 @@ function get_lot(int $id, mysqli $con):Array | null {
 
     $query_bets = '
         SELECT
-         *
+         creation_date, cost, user_id, lot_id, name as user_name
          FROM bets 
+         JOIN users on bets.user_id = users.id
          WHERE lot_id = '.$id.';
     ';
 
@@ -284,3 +286,22 @@ function get_category_name($con, int $id) {
     $category = mysqli_fetch_assoc($res);
     return $category['name'];
 };
+
+
+
+
+function get_passed_time(string $created_time):string {
+    $delta = time() - strtotime($created_time);
+    $time = null;
+    if ($delta > 3600 * 24) {
+        $time = $created_time;
+    } else if ($delta > 3600) {
+        $time = ceil($delta / 3600);
+        $time = $time . ' ' . get_noun_plural_form($time, 'час', 'часа', 'часов') . ' назад';
+    } else {
+        $time = ceil($delta / 60);
+        $time = $time . ' ' . get_noun_plural_form($time, 'минута', 'минуты', 'минут') . ' назад';
+    }
+
+    return $time;
+}

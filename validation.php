@@ -101,9 +101,9 @@ function validate_fields(array $fields, array $rules, array $extra_args = Array(
             $fn = $rules[$name];
             $params = $extra_args[$name] ?? false;
             $result = $fn($value, $params);
-//            if (gettype($result) == 'string') {
+            if (gettype($result) == 'string') {
                 $errors[$name] = $result;
-//            }
+            }
         }
     }
 
