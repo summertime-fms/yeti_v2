@@ -16,6 +16,9 @@ if (!$lot_id) {
     die;
 } else {
     $lot = get_lot(intval($lot_id), $con);
+    $is_able_to_bet = empty(array_filter($lot['bets'], function ($bet) {
+        return $bet['user_id'] === $_SESSION['user']['id'];
+    }));
 }
 
 if (!$lot) {
@@ -31,7 +34,8 @@ $page_vars = Array(
     'lot' => $lot,
     'categories' => $categories,
     'user' => $user,
-    'min_bet' => $min_bet
+    'min_bet' => $min_bet,
+    'is_able_to_bet' => $is_able_to_bet
 );
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -45,9 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors) > 0) {
         $page_vars['errors'] = $errors;
     } else {
-        $date = date('d-m-Y H:m');
+        $date = date('Y-m-d H:i:s');
         $data = Array(
-            date('Y-m-d H:m:s'),
+            $date,
             $bet,
             $user['id'],
             $lot_id,

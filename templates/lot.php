@@ -39,6 +39,7 @@
                         Мин. ставка <span><?=format_cost($min_bet)?></span>
                     </div>
                 </div>
+                <?php if ($is_able_to_bet): ?>
                 <form class="lot-item__form" action="/lot.php?id=<?=$_GET['id']?>" method="post" autocomplete="off">
                     <?php
                         $invalid_class = isset($errors['bet']) ? 'form__item--invalid' : '';
@@ -52,6 +53,7 @@
                     </p>
                     <button type="submit" class="button">Сделать ставку</button>
                 </form>
+                <?php endif;?>
             </div>
             <?php endif;?>
 
@@ -62,16 +64,12 @@
             <div class="history">
                 <h3>История ставок (<span>10</span>)</h3>
                 <table class="history__list">
-                    <?php
-                            foreach ($bets as $bet):
-                    ?>
-
+                    <?php foreach ($bets as $bet):?>
                     <tr class="history__item">
                         <td class="history__name"><?=$bet['user_name']?></td>
                         <td class="history__price"><?=format_cost($bet['cost'])?></td>
                         <td class="history__time"><?=get_passed_time($bet['creation_date'])?></td>
                     </tr>
-
                     <?php endforeach;?>
                 </table>
             </div>

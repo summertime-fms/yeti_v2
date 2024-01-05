@@ -300,7 +300,7 @@ function get_passed_time(string $created_time):string {
         $time = $time . ' ' . get_noun_plural_form($time, 'час', 'часа', 'часов') . ' назад';
     } else {
         $time = ceil($delta / 60);
-        $time = $time . ' ' . get_noun_plural_form($time, 'минута', 'минуты', 'минут') . ' назад';
+        $time = $time . ' ' . get_noun_plural_form($time, 'минуту', 'минуты', 'минут') . ' назад';
     }
 
     return $time;
