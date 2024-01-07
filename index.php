@@ -10,7 +10,7 @@ $user_name = ''; // укажите здесь ваше имя
 
 $lots = get_lots($con);
 
-$page_content = include_template('main.php', Array(
+$page_content = include_template('main.php', array(
     'categories' => $categories,
     'lots' => $lots
 ));
@@ -25,4 +25,4 @@ $layout = [
 $page = include_template('layout.php', $layout);
 ?>
 
-<?=$page?>
+<?= $page ?>

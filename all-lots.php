@@ -7,7 +7,8 @@
 require_once 'init.php';
 const PER_PAGE = 2;
 
-function get_lots_count($con, $current_category) {
+function get_lots_count($con, $current_category)
+{
     $date_now = date('Y-m-d H:m:s');
     $query = "SELECT COUNT(*) as total
                 from lots l
@@ -15,10 +16,9 @@ function get_lots_count($con, $current_category) {
                         ON l.category_id = c.id 
                 WHERE c.id = {$current_category} AND l.completion_date > '{$date_now}'";
     $result = mysqli_query($con, $query);
-    $data =  mysqli_fetch_assoc($result);
+    $data = mysqli_fetch_assoc($result);
     return $data['total'];
 }
-
 
 
 $current_page = $_GET['page'] ?? 1;
@@ -42,14 +42,14 @@ $query = "
     WHERE completion_date > '$now'
     AND l.category_id = {$current_category_id}
     ORDER BY creation_date DESC
-        LIMIT "  . PER_PAGE . " OFFSET " . $offset;
+        LIMIT " . PER_PAGE . " OFFSET " . $offset;
 
 $lots = get_data($con, $query);
 $total_count = get_lots_count($con, $current_category_id);
 $pages_count = ceil($total_count / PER_PAGE);
 $pages = range(1, $pages_count);
 
-$page_content = include_template('all-lots.php', Array(
+$page_content = include_template('all-lots.php', array(
     'categories' => $categories,
     'lots' => $lots,
     'current_category' => get_category_name($con, $current_category_id),
@@ -68,4 +68,4 @@ $layout = [
 $page = include_template('layout.php', $layout);
 ?>
 
-<?=$page?>
+<?= $page ?>

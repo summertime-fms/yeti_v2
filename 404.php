@@ -4,14 +4,14 @@
  */
 require_once 'init.php';
 
-$page_content = include_template('404.php', Array(
+$page_content = include_template('404.php', array(
     'categories' => $categories,
 ));
 
-$layout = Array(
+$layout = array(
     'title' => 'Ошибка 404',
     'content' => $page_content,
-    'categories'=> $categories
+    'categories' => $categories
 );
 
 $page = include_template('layout.php', $layout);

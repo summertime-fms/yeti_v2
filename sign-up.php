@@ -3,21 +3,21 @@
 require_once 'init.php';
 require_once 'validation.php';
 
-if(isset($user)) {
+if (isset($user)) {
     http_response_code(403);
     exit();
 }
 
-$page_data = Array();
+$page_data = array();
 
-$args = Array(
+$args = array(
     'email' => FILTER_DEFAULT,
     'password' => FILTER_DEFAULT,
     'name' => FILTER_SANITIZE_SPECIAL_CHARS,
     'message' => FILTER_SANITIZE_SPECIAL_CHARS
 );
 
-$errors = Array();
+$errors = array();
 
 $input = filter_input_array(INPUT_POST, $args);
 if ($input) {
@@ -31,7 +31,7 @@ if ($input) {
     if (!empty($errors)) {
         $page_data['errors'] = $errors;
     } else {
-        $data = Array(
+        $data = array(
             date('Y-m-d H:m:s'),
             $input['email'],
             $input['name'],
@@ -61,7 +61,7 @@ if ($input) {
 
 $page_content = include_template('sign-up.php', $page_data);
 
-$layout = Array(
+$layout = array(
     'title' => 'Регистрация',
     'content' => $page_content,
     'categories' => $categories,

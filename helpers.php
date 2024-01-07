@@ -14,13 +14,15 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
     return $dateTimeObj !== false && !date_get_last_errors();
 }
 
-function get_mime_type(Array $file): string {
+function get_mime_type(array $file): string
+{
     $file_info = finfo_open(FILEINFO_MIME_TYPE);
     $file_name = $file['tmp_name'];
 
@@ -36,7 +38,8 @@ function get_mime_type(Array $file): string {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -53,12 +56,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -103,9 +108,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -133,7 +138,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -155,13 +161,15 @@ function include_template($name, array $data = []) {
  * @param int|float $cost Цена
  * @return string Отформатированная цена
  */
-function format_cost($cost): string {
+function format_cost($cost): string
+{
     $normalized_cost = ceil($cost);
     $formatted_cost = $normalized_cost < 1000 ? $normalized_cost : number_format($normalized_cost, 0, '', ' ');
     return $formatted_cost . ' ₽';
 }
 
-function format_time($deadline)  {
+function format_time($deadline)
+{
     $now = time();
     $deadline_ts = strtotime($deadline);
     $hours_number = floor(($deadline_ts - $now) / 3600);
@@ -178,9 +186,10 @@ function format_time($deadline)  {
  * @param string $dir_name Название директории, в которую следует переместить файл
  * @return string $url Путь до файла
  */
-function save_file($file, $dir_name = 'uploads') {
+function save_file($file, $dir_name = 'uploads')
+{
     $name = $file['name'];
-    $path = __DIR__ . '/' .$dir_name. '/';
+    $path = __DIR__ . '/' . $dir_name . '/';
     $url = '/' . $dir_name . '/' . $name;
 
     move_uploaded_file($file['tmp_name'], $path . $name);
@@ -195,17 +204,21 @@ function save_file($file, $dir_name = 'uploads') {
  *
  * @return Array Массив с данными
  */
-function get_data(mysqli $con, string $query):Array {
+function get_data(mysqli $con, string $query): array
+{
     $res = mysqli_query($con, $query);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
-};
+}
+
+;
 
 /**
  * Возвращает данные конкретного лота
  * @param $id int айдишник лота
  * @return array Данные лота
  */
-function get_lot(int $id, mysqli $con):Array | null {
+function get_lot(int $id, mysqli $con): array|null
+{
     $query_lot = '
         SELECT
             l.id,
@@ -221,7 +234,7 @@ function get_lot(int $id, mysqli $con):Array | null {
         FROM lots l
         JOIN categories c
                 ON c.id = l.category_id 
-                WHERE l.id = '.$id.'
+                WHERE l.id = ' . $id . '
     ';
 
     $query_bets = '
@@ -229,7 +242,7 @@ function get_lot(int $id, mysqli $con):Array | null {
          creation_date, cost, user_id, lot_id, name as user_name
          FROM bets 
          JOIN users on bets.user_id = users.id
-         WHERE lot_id = '.$id.';
+         WHERE lot_id = ' . $id . ';
     ';
 
     mysqli_begin_transaction($con);
@@ -237,20 +250,23 @@ function get_lot(int $id, mysqli $con):Array | null {
     $res2 = mysqli_query($con, $query_bets);
     if ($res1 && $res2) {
         mysqli_commit($con);
-        $lot =  mysqli_fetch_assoc($res1);
+        $lot = mysqli_fetch_assoc($res1);
         $lot['bets'] = mysqli_fetch_all($res2, MYSQLI_ASSOC);
         return $lot;
     } else {
         mysqli_rollback($con);
         return null;
     }
-};
+}
+
+;
 
 /**
  * Возвращает все активные лоты из БД
  * @return Array Массив с лотами
  */
-function get_lots(mysqli $con):Array {
+function get_lots(mysqli $con): array
+{
     $now = date('Y-m-d H:m:s');
     $query = "
         SELECT 
@@ -268,39 +284,47 @@ function get_lots(mysqli $con):Array {
         WHERE completion_date > '$now'
         ORDER BY creation_date DESC";
     return get_data($con, $query);
-};
+}
+
+;
 
 
 /**
  * Возвращает категории лотов из БД
  * @return Array Массив с категориями
  */
-function get_categories(mysqli $con):Array {
+function get_categories(mysqli $con): array
+{
     $query = 'SELECT * from categories';
     return get_data($con, $query);
-};
+}
 
-function get_category_name($con, int $id) {
+;
+
+function get_category_name($con, int $id)
+{
     $query = "SELECT id, name from categories WHERE id = $id";
     $res = mysqli_query($con, $query);
     $category = mysqli_fetch_assoc($res);
     return $category['name'];
-};
+}
 
+;
 
-
-
-function get_passed_time(string $created_time):string {
+function get_passed_time(string $created_time): string
+{
     $delta = time() - strtotime($created_time);
     $time = null;
     if ($delta > 3600 * 24) {
-        $time = $created_time;
-    } else if ($delta > 3600) {
-        $time = ceil($delta / 3600);
-        $time = $time . ' ' . get_noun_plural_form($time, 'час', 'часа', 'часов') . ' назад';
+        $time = date_format($created_time, 'Y.m.d');
     } else {
-        $time = ceil($delta / 60);
-        $time = $time . ' ' . get_noun_plural_form($time, 'минуту', 'минуты', 'минут') . ' назад';
+        if ($delta > 3600) {
+            $time = ceil($delta / 3600);
+            $time = $time . ' ' . get_noun_plural_form($time, 'час', 'часа', 'часов') . ' назад';
+        } else {
+            $time = ceil($delta / 60);
+            $time = $time . ' ' . get_noun_plural_form($time, 'минуту', 'минуты', 'минут') . ' назад';
+        }
     }
 
     return $time;

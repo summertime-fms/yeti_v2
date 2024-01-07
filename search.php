@@ -11,7 +11,8 @@ $page_data = array(
     'categories' => $categories
 );
 
-function search_lots($search, $con) {
+function search_lots($search, $con)
+{
     $now = date('Y-m-d H:m:s');
 
     echo $search;

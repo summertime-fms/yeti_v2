@@ -1,7 +1,8 @@
 <?php
-function check_existing_email(string $email):string | null {
+function check_existing_email(string $email): string|null
+{
 
-    $sql = "SELECT * FROM users WHERE email = '".$email."'";
+    $sql = "SELECT * FROM users WHERE email = '" . $email . "'";
     $db_res = mysqli_query($GLOBALS['con'], $sql);
     if (!$db_res) {
         $error = mysqli_error($GLOBALS['con']);
@@ -14,41 +15,47 @@ function check_existing_email(string $email):string | null {
     return null;
 }
 
-$validation_rules = Array(
-    'lot-rate' => function($value) {
+$validation_rules = array(
+    'lot-rate' => function ($value) {
         if (is_float($value) || $value < 1) {
             return 'Значение должно быть целым числом больше 0';
         }
     },
-    'lot-date' => function($value) {
+    'lot-date' => function ($value) {
         if (!is_date_valid($value)) {
             return 'Дата должна быть в формате "ГГГГ-ММ-ДД".';
-        } else if (strtotime($value) - strtotime(date('Y-m-d')) < (60 * 60 * 24)) {
-            return 'Дата завершения должна быть больше текущей даты, хотя бы на один день.';
+        } else {
+            if (strtotime($value) - strtotime(date('Y-m-d')) < (60 * 60 * 24)) {
+                return 'Дата завершения должна быть больше текущей даты, хотя бы на один день.';
+            }
         }
     },
-    'lot-step' => function($value) {
+    'lot-step' => function ($value) {
         if (is_float($value) || $value < 1) {
             return 'Значение должно быть целым числом больше 0';
         }
     },
-    'img' => function($file) {
+    'img' => function ($file) {
         if (empty($file['name'])) {
             return 'Пожалуйста, прикрепите изображение лота.';
-        } else if (!in_array(get_mime_type($file), Array('image/png', 'image/jpeg'))) {
-            return 'Изображение должно быть в формате jpeg/jpg/png.';
+        } else {
+            if (!in_array(get_mime_type($file), array('image/png', 'image/jpeg'))) {
+                return 'Изображение должно быть в формате jpeg/jpg/png.';
+            }
         }
     },
-    'email' => function($value) {
+    'email' => function ($value) {
         if (strlen($value) == 0) {
             return 'Пожалуйста, введите e-mail';
-        } else if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            return 'Неверный формат e-mail.';
         } else {
-            return true;
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                return 'Неверный формат e-mail.';
+            } else {
+                return true;
+            }
         }
     },
-    'password' => function($value) {
+    'password' => function ($value) {
         if (strlen($value) == 0) {
             return 'Пожалуйста, введите пароль';
         } elseif (strlen($value) < 8) {
@@ -58,31 +65,31 @@ $validation_rules = Array(
         return true;
     },
 
-    'name' => function($value) {
+    'name' => function ($value) {
         if (strlen($value) == 0) {
             return 'Пожалуйста, введите ваше имя.';
         };
 
         return true;
     },
-    'message' => function($value) {
+    'message' => function ($value) {
         if (strlen($value) === 0) {
             return 'Пожалуйста, введите ваше имя.';
         };
 
         return true;
     },
-    'lot-name' => function($value) {
+    'lot-name' => function ($value) {
         if (strlen($value) === 0) {
             return 'Пожалуйста, введите название лота.';
         }
     },
-    'category' => function($value) {
+    'category' => function ($value) {
         if (strlen($value) === 0) {
             return 'Пожалуйста, укажите категорию.';
         }
     },
-    'bet' => function($value, $args) {
+    'bet' => function ($value, $args) {
         extract($args);
         $value = intval($value);
         if (!$value || $value <= 0) {
@@ -93,8 +100,9 @@ $validation_rules = Array(
     }
 );
 
-function validate_fields(array $fields, array $rules, array $extra_args = Array()): array {
-    $errors = Array();
+function validate_fields(array $fields, array $rules, array $extra_args = array()): array
+{
+    $errors = array();
 
     foreach ($fields as $name => $value) {
         if (isset($rules[$name])) {

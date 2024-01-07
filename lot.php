@@ -30,7 +30,7 @@ $lot['actual_cost'] = $lot['bets'] ? end($lot['bets'])['cost'] : $lot['initial_c
 $min_bet = $lot['actual_cost'] + $lot['bid_step'];
 $lot_id = $_GET['id'];
 
-$page_vars = Array(
+$page_vars = array(
     'lot' => $lot,
     'categories' => $categories,
     'user' => $user,
@@ -39,18 +39,18 @@ $page_vars = Array(
 );
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $bet = filter_input(INPUT_POST, 'bet',FILTER_SANITIZE_SPECIAL_CHARS);
+    $bet = filter_input(INPUT_POST, 'bet', FILTER_SANITIZE_SPECIAL_CHARS);
     $errors = validate_fields(
-        Array('bet' => $bet),
+        array('bet' => $bet),
         $validation_rules,
-        Array('bet' => Array('min_bet' => $min_bet))
+        array('bet' => array('min_bet' => $min_bet))
     );
     $errors = array_filter($errors);
     if (count($errors) > 0) {
         $page_vars['errors'] = $errors;
     } else {
         $date = date('Y-m-d H:i:s');
-        $data = Array(
+        $data = array(
             $date,
             $bet,
             $user['id'],
@@ -65,14 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($error) {
             echo 'Ошибка MYSQL:' . $error;
         } else {
-            header('Location: lot.php?id='. $lot_id);
+            header('Location: lot.php?id=' . $lot_id);
             exit();
         }
     }
 }
 $page_content = include_template('lot.php', $page_vars);
 
-$layout = Array(
+$layout = array(
     'title' => 'Главная',
     'categories' => $categories,
     'content' => $page_content,
@@ -82,4 +82,4 @@ $layout = Array(
 $page = include_template('layout.php', $layout);
 ?>
 
-<?=$page?>
+<?= $page ?>

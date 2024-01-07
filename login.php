@@ -2,19 +2,21 @@
 
 require_once 'init.php';
 require_once 'validation.php';
-$args = Array(
+$args = array(
     'email' => FILTER_SANITIZE_SPECIAL_CHARS,
     'password' => FILTER_DEFAULT
 );
 
-$page_data = Array();
+$page_data = array();
 
-function check_password($user_input, $db_password) {
+function check_password($user_input, $db_password)
+{
     return password_verify($user_input, $db_password);
 }
 
-function auth($user_data) {
-    $sql = "SELECT * FROM users WHERE email = '".$user_data['email']."'";
+function auth($user_data)
+{
+    $sql = "SELECT * FROM users WHERE email = '" . $user_data['email'] . "'";
     $db_res = mysqli_query($GLOBALS['con'], $sql);
     $user = $db_res ? mysqli_fetch_array($db_res, MYSQLI_ASSOC) : null;
 

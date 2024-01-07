@@ -7,13 +7,13 @@
 require_once 'init.php';
 require_once 'validation.php';
 
-if(!isset($user)) {
+if (!isset($user)) {
     http_response_code(403);
     exit();
 }
 
 
-$args = Array(
+$args = array(
     'lot-name' => FILTER_SANITIZE_SPECIAL_CHARS,
     'category' => FILTER_SANITIZE_NUMBER_INT,
     'message' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -22,7 +22,7 @@ $args = Array(
     'lot-date' => FILTER_SANITIZE_SPECIAL_CHARS
 );
 
-$page_data = Array(
+$page_data = array(
     'categories' => $categories
 );
 
@@ -38,7 +38,7 @@ if ($input) {
     } else {
         $file_url = save_file($input['img']);
 
-        $data = Array(
+        $data = array(
             $input['lot-name'],
             $_SESSION['user']['id'],
             date('Y-m-d H:m:s'),
@@ -64,17 +64,17 @@ if ($input) {
         $stmt = db_get_prepare_stmt($GLOBALS['con'], $sql, $data);
         mysqli_stmt_execute($stmt);
         $id = mysqli_insert_id($GLOBALS['con']);
-        header('Location: lot.php?id='.$id);
+        header('Location: lot.php?id=' . $id);
         exit();
     }
 }
 
 $page_content = include_template('add-lot.php', $page_data);
 
-$layout = Array(
+$layout = array(
     'title' => 'Добавление лота',
-    'categories'=> $categories,
-    'content'=>$page_content,
+    'categories' => $categories,
+    'content' => $page_content,
     'user' => $user
 );
 
